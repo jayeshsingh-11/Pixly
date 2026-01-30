@@ -1,4 +1,10 @@
-export const MODELS = [
+export interface Model {
+  label: string;
+  value: string;
+  hidden?: boolean;
+}
+
+export const MODELS: Model[] = [
   // Groq Models (Ultra-fast inference - FREE)
   {
     label: "Llama 3.3 70B (Groq) ⚡",
@@ -52,7 +58,7 @@ export const SUGGESTED_PROMPTS = [
   {
     title: "Flashcard app",
     description:
-      "Build me a flashcard app about llamas. Have some flash cards and also have the ability for users to add their own. Show one side of a card at first and reveal the answer on button click, keeping track of correct guesses to measure progress.",
+      "Build me a flashcard app about learning a new language. Have some flash cards and also have the ability for users to add their own. Show one side of a card at first and reveal the answer on button click, keeping track of correct guesses to measure progress.",
   },
   {
     title: "Timezone dashboard",

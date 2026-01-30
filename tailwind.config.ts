@@ -22,11 +22,19 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       colors: {
-        brand: "#E1E7EC",
+        brand: {
+          light: "#F9FAFB", // Soft background
+          gray: "#F3F4F6", // Card background
+          border: "#E5E7EB", // Border color
+          accent: "#2563EB", // Primary Blue
+          text: "#111827", // Main text
+          subtext: "#6B7280", // Subtext
+        },
         blue: {
-          "300": "#94b2fa",
-          "500": "#326DF5",
-          "700": "#1F326F",
+          "300": "#93C5FD",
+          "500": "#3B82F6",
+          "600": "#2563EB",
+          "700": "#1D4ED8",
         },
         gray: colors.zinc,
         background: "hsl(var(--background))",
