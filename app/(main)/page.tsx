@@ -14,12 +14,14 @@ import GithubIcon from "@/components/icons/github-icon";
 import LightningBoltIcon from "@/components/icons/lightning-bolt";
 import LoadingButton from "@/components/loading-button";
 import Spinner from "@/components/spinner";
-import bgImg from "@/public/halo.png";
+import bgImg from "@/public/pixon-bg-final.png";
 import assert from "assert";
 import { CheckIcon, ChevronDownIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Features } from "@/components/features";
+import { HowItWorks } from "@/components/how-it-works";
 import {
   use,
   useState,
@@ -94,300 +96,309 @@ export default function Home() {
   );
 
   return (
-    <div className="relative flex grow flex-col">
-      <div className="absolute inset-0 flex justify-center">
-        <Image
-          src={bgImg}
-          alt=""
-          className="max-h-[953px] w-full max-w-[1200px] object-cover object-top mix-blend-screen"
-          priority
-        />
-      </div>
+    <div className="flex flex-col h-screen overflow-y-auto overflow-x-hidden">
+      <div className="relative flex flex-col h-[100dvh] w-full shrink-0">
+        <div className="absolute inset-0 flex justify-center overflow-hidden">
+          <Image
+            src={bgImg}
+            alt=""
+            className="w-full h-full object-cover object-top"
+            priority
+            quality={100}
+            sizes="100vw"
+            unoptimized
+          />
+        </div>
 
-      <div className="isolate flex h-full grow flex-col">
-        <Header />
+        <div className="isolate flex flex-col h-full">
+          <Header />
 
-        <div className="mt-10 flex grow flex-col items-center px-4 lg:mt-16">
-          <h1 className="mt-4 text-balance text-center text-4xl leading-none font-bold text-gray-900 md:text-[64px] lg:mt-8 tracking-tight">
-            Turn your <span className="text-blue-600">idea</span>
-            <br className="hidden md:block" /> into an{" "}
-            <span className="text-blue-600">app</span>
-          </h1>
+          <div className="mt-10 flex grow flex-col items-center px-4 lg:mt-16">
+            <h1 className="mt-4 text-balance text-center text-4xl leading-none font-bold text-white md:text-[64px] lg:mt-8 tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]">
+              Turn your <span className="bg-gradient-to-r from-pink-300 to-rose-400 bg-clip-text text-transparent font-black drop-shadow-none">idea</span>
+              <br className="hidden md:block" /> into an{" "}
+              <span className="bg-gradient-to-r from-amber-200 to-yellow-400 bg-clip-text text-transparent font-black drop-shadow-none">app</span>
+            </h1>
 
-          <p className="mt-4 text-balance text-center text-lg text-gray-600 max-w-lg">
-            Pixly brings your vision to life in seconds.
-          </p>
+            <p className="mt-4 text-balance text-center text-lg text-white/90 max-w-lg drop-shadow-md">
+              Pixon brings your vision to life in seconds.
+            </p>
 
-          <form
-            className="relative w-full max-w-2xl pt-6 lg:pt-12"
-            action={async (formData) => {
-              startTransition(async () => {
-                const { prompt, model, quality } = Object.fromEntries(formData);
+            <form
+              className="relative w-full max-w-2xl pt-6 lg:pt-12"
+              action={async (formData) => {
+                startTransition(async () => {
+                  const { prompt, model, quality } = Object.fromEntries(formData);
 
-                assert.ok(typeof prompt === "string");
-                assert.ok(typeof model === "string");
-                assert.ok(quality === "high" || quality === "low");
+                  assert.ok(typeof prompt === "string");
+                  assert.ok(typeof model === "string");
+                  assert.ok(quality === "high" || quality === "low");
 
-                const response = await fetch("/api/create-chat", {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({
-                    prompt,
-                    model,
-                    quality,
-                    screenshotUrl,
-                  }),
-                });
-
-                if (!response.ok) {
-                  throw new Error("Failed to create chat");
-                }
-
-                const { chatId, lastMessageId } = await response.json();
-
-                const streamPromise = fetch(
-                  "/api/get-next-completion-stream-promise",
-                  {
+                  const response = await fetch("/api/create-chat", {
                     method: "POST",
-                    body: JSON.stringify({ messageId: lastMessageId, model }),
-                  },
-                ).then((res) => {
-                  if (!res.body) {
-                    throw new Error("No body on response");
-                  }
-                  return res.body;
-                });
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      prompt,
+                      model,
+                      quality,
+                      screenshotUrl,
+                    }),
+                  });
 
-                startTransition(() => {
-                  setStreamPromise(streamPromise);
-                  router.push(`/chats/${chatId}`);
+                  if (!response.ok) {
+                    throw new Error("Failed to create chat");
+                  }
+
+                  const { chatId, lastMessageId } = await response.json();
+
+                  const streamPromise = fetch(
+                    "/api/get-next-completion-stream-promise",
+                    {
+                      method: "POST",
+                      body: JSON.stringify({ messageId: lastMessageId, model }),
+                    },
+                  ).then((res) => {
+                    if (!res.body) {
+                      throw new Error("No body on response");
+                    }
+                    return res.body;
+                  });
+
+                  startTransition(() => {
+                    setStreamPromise(streamPromise);
+                    router.push(`/chats/${chatId}`);
+                  });
                 });
-              });
-            }}
-          >
-            <Fieldset>
-              <div className="relative flex w-full max-w-2xl rounded-xl border border-gray-200 bg-white pb-10 shadow-xl shadow-blue-900/5 ring-1 ring-gray-200">
-                <div className="w-full">
-                  {screenshotLoading && (
-                    <div className="relative mx-3 mt-3">
-                      <div className="rounded-xl">
-                        <div className="group mb-2 flex h-16 w-[68px] animate-pulse items-center justify-center rounded bg-gray-200">
-                          <Spinner />
+              }}
+            >
+              <Fieldset>
+                <div className="relative flex w-full max-w-2xl rounded-xl border border-gray-200 bg-white pb-10 shadow-xl shadow-black/5 ring-1 ring-gray-200">
+                  <div className="w-full">
+                    {screenshotLoading && (
+                      <div className="relative mx-3 mt-3">
+                        <div className="rounded-xl">
+                          <div className="group mb-2 flex h-16 w-[68px] animate-pulse items-center justify-center rounded bg-gray-200">
+                            <Spinner />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  )}
-                  {screenshotUrl && (
-                    <div
-                      className={`${isPending ? "invisible" : ""} relative mx-3 mt-3`}
-                    >
-                      <div className="rounded-xl">
-                        <img
-                          alt="screenshot"
-                          src={screenshotUrl}
-                          className="group relative mb-2 h-16 w-[68px] rounded object-cover"
-                        />
+                    )}
+                    {screenshotUrl && (
+                      <div
+                        className={`${isPending ? "invisible" : ""} relative mx-3 mt-3`}
+                      >
+                        <div className="rounded-xl">
+                          <img
+                            alt="screenshot"
+                            src={screenshotUrl}
+                            className="group relative mb-2 h-16 w-[68px] rounded object-cover"
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          id="x-circle-icon"
+                          className="absolute -right-3 -top-4 left-14 z-10 size-5 rounded-full bg-white text-gray-900 hover:text-gray-500"
+                          onClick={() => {
+                            setScreenshotUrl(undefined);
+                            if (fileInputRef.current) {
+                              fileInputRef.current.value = "";
+                            }
+                          }}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="size-6"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                            />
+                          </svg>
+                        </button>
                       </div>
-                      <button
-                        type="button"
-                        id="x-circle-icon"
-                        className="absolute -right-3 -top-4 left-14 z-10 size-5 rounded-full bg-white text-gray-900 hover:text-gray-500"
-                        onClick={() => {
-                          setScreenshotUrl(undefined);
-                          if (fileInputRef.current) {
-                            fileInputRef.current.value = "";
+                    )}
+                    <div className="relative">
+                      <div className="p-3">
+                        <p className="invisible w-full whitespace-pre-wrap">
+                          {textareaResizePrompt}
+                        </p>
+                      </div>
+                      <textarea
+                        ref={textareaRef}
+                        placeholder="Build me a budgeting app..."
+                        required
+                        name="prompt"
+                        rows={2}
+                        className="peer absolute inset-0 w-full resize-none bg-transparent px-4 py-3 text-gray-900 placeholder-gray-500 focus-visible:outline-none disabled:opacity-50"
+                        value={prompt}
+                        onChange={(e) => setPrompt(e.target.value)}
+                        onPaste={(e) => {
+                          // Clean up pasted text
+                          e.preventDefault();
+                          const pastedText = e.clipboardData.getData("text");
+
+                          // Normalize line endings and clean up whitespace
+                          const cleanedText = pastedText
+                            .replace(/\r\n/g, "\n") // Convert Windows line endings
+                            .replace(/\r/g, "\n") // Convert old Mac line endings
+                            .replace(/\n{3,}/g, "\n\n") // Max 2 consecutive newlines
+                            .trim(); // Remove leading/trailing whitespace
+
+                          // Insert the cleaned text at cursor position
+                          const textarea = e.target as HTMLTextAreaElement;
+                          const start = textarea.selectionStart;
+                          const end = textarea.selectionEnd;
+                          const newValue =
+                            prompt.slice(0, start) +
+                            cleanedText +
+                            prompt.slice(end);
+
+                          setPrompt(newValue);
+
+                          // Set cursor position after the pasted text
+                          setTimeout(() => {
+                            if (textareaRef.current) {
+                              textareaRef.current.selectionStart =
+                                start + cleanedText.length;
+                              textareaRef.current.selectionEnd =
+                                start + cleanedText.length;
+                            }
+                          }, 0);
+                        }}
+                        onKeyDown={(event) => {
+                          if (event.key === "Enter" && !event.shiftKey) {
+                            event.preventDefault();
+                            const target = event.target;
+                            if (!(target instanceof HTMLTextAreaElement)) return;
+                            target.closest("form")?.requestSubmit();
                           }
                         }}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.5}
-                          stroke="currentColor"
-                          className="size-6"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                  )}
-                  <div className="relative">
-                    <div className="p-3">
-                      <p className="invisible w-full whitespace-pre-wrap">
-                        {textareaResizePrompt}
-                      </p>
-                    </div>
-                    <textarea
-                      ref={textareaRef}
-                      placeholder="Build me a budgeting app..."
-                      required
-                      name="prompt"
-                      rows={2}
-                      className="peer absolute inset-0 w-full resize-none bg-transparent px-4 py-3 text-gray-900 placeholder-gray-500 focus-visible:outline-none disabled:opacity-50"
-                      value={prompt}
-                      onChange={(e) => setPrompt(e.target.value)}
-                      onPaste={(e) => {
-                        // Clean up pasted text
-                        e.preventDefault();
-                        const pastedText = e.clipboardData.getData("text");
-
-                        // Normalize line endings and clean up whitespace
-                        const cleanedText = pastedText
-                          .replace(/\r\n/g, "\n") // Convert Windows line endings
-                          .replace(/\r/g, "\n") // Convert old Mac line endings
-                          .replace(/\n{3,}/g, "\n\n") // Max 2 consecutive newlines
-                          .trim(); // Remove leading/trailing whitespace
-
-                        // Insert the cleaned text at cursor position
-                        const textarea = e.target as HTMLTextAreaElement;
-                        const start = textarea.selectionStart;
-                        const end = textarea.selectionEnd;
-                        const newValue =
-                          prompt.slice(0, start) +
-                          cleanedText +
-                          prompt.slice(end);
-
-                        setPrompt(newValue);
-
-                        // Set cursor position after the pasted text
-                        setTimeout(() => {
-                          if (textareaRef.current) {
-                            textareaRef.current.selectionStart =
-                              start + cleanedText.length;
-                            textareaRef.current.selectionEnd =
-                              start + cleanedText.length;
-                          }
-                        }, 0);
-                      }}
-                      onKeyDown={(event) => {
-                        if (event.key === "Enter" && !event.shiftKey) {
-                          event.preventDefault();
-                          const target = event.target;
-                          if (!(target instanceof HTMLTextAreaElement)) return;
-                          target.closest("form")?.requestSubmit();
-                        }
-                      }}
-                    />
-                  </div>
-                </div>
-                <div className="absolute bottom-2 left-3 right-2.5 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <Select value={model} onValueChange={setModel}>
-                      <SelectTrigger className="w-[180px] border-none bg-transparent px-2 text-gray-500 hover:bg-gray-50 hover:text-gray-900 shadow-none focus:ring-0">
-                        <SelectValue placeholder="Select model" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {MODELS.filter((m) => !m.hidden).map((m) => (
-                          <SelectItem key={m.value} value={m.value}>
-                            <div className="flex items-center gap-2">
-                              <span>{m.label}</span>
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-
-                    <div className="h-4 w-px bg-gray-200 max-sm:hidden" />
-
-                    <Select value={quality} onValueChange={setQuality}>
-                      <SelectTrigger className="w-[160px] border-none bg-transparent px-2 text-gray-500 hover:bg-gray-50 hover:text-gray-900 shadow-none focus:ring-0">
-                        <SelectValue placeholder="Select quality" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {qualityOptions.map((q) => (
-                          <SelectItem key={q.value} value={q.value}>
-                            <div className="flex items-center gap-2">
-                              <span>{q.label}</span>
-                              {q.value === "high" && (
-                                <LightningBoltIcon className="size-3 text-yellow-500" />
-                              )}
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <div className="h-4 w-px bg-gray-200 max-sm:hidden" />
-                    <div>
-                      <label
-                        htmlFor="screenshot"
-                        className="flex cursor-pointer gap-2 text-sm text-gray-500 hover:text-blue-600 font-medium transition-colors items-center"
-                      >
-                        <div className="flex size-7 items-center justify-center rounded-lg bg-gray-100 text-gray-600 group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
-                          <UploadIcon className="size-4" />
-                        </div>
-                        <div className="flex items-center justify-center transition hover:text-blue-600">
-                          {screenshotUrl ? "Change Screenshot" : "Scan UI"}
-                        </div>
-                      </label>
-                      <input
-                        // name="screenshot"
-                        id="screenshot"
-                        type="file"
-                        accept="image/png, image/jpeg, image/webp"
-                        onChange={handleScreenshotUpload}
-                        className="hidden"
-                        ref={fileInputRef}
                       />
                     </div>
                   </div>
+                  <div className="absolute bottom-2 left-3 right-2.5 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <Select value={model} onValueChange={setModel}>
+                        <SelectTrigger className="w-[180px] border-none bg-transparent px-2 text-gray-500 hover:bg-gray-50 hover:text-gray-900 shadow-none focus:ring-0">
+                          <SelectValue placeholder="Select model" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {MODELS.filter((m) => !m.hidden).map((m) => (
+                            <SelectItem key={m.value} value={m.value}>
+                              <div className="flex items-center gap-2">
+                                <span>{m.label}</span>
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
 
-                  <div className="relative flex shrink-0 has-[:disabled]:opacity-50">
-                    <div className="pointer-events-none absolute inset-0 -bottom-[1px] rounded bg-blue-500" />
+                      <div className="h-4 w-px bg-gray-200 max-sm:hidden" />
 
-                    <LoadingButton
-                      className="relative inline-flex size-6 items-center justify-center rounded bg-blue-500 font-medium text-white shadow-lg outline-blue-300 hover:bg-blue-500/75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-90"
-                      type="submit"
-                      disabled={screenshotLoading || prompt.length === 0}
-                    >
-                      <ArrowRightIcon />
-                    </LoadingButton>
+                      <Select value={quality} onValueChange={setQuality}>
+                        <SelectTrigger className="w-[160px] border-none bg-transparent px-2 text-gray-500 hover:bg-gray-50 hover:text-gray-900 shadow-none focus:ring-0">
+                          <SelectValue placeholder="Select quality" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {qualityOptions.map((q) => (
+                            <SelectItem key={q.value} value={q.value}>
+                              <div className="flex items-center gap-2">
+                                <span>{q.label}</span>
+                                {q.value === "high" && (
+                                  <LightningBoltIcon className="size-3 text-yellow-500" />
+                                )}
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <div className="h-4 w-px bg-gray-200 max-sm:hidden" />
+                      <div>
+                        <label
+                          htmlFor="screenshot"
+                          className="flex cursor-pointer gap-2 text-sm text-gray-500 hover:text-black font-medium transition-colors items-center"
+                        >
+                          <div className="flex size-7 items-center justify-center rounded-lg bg-gray-100 text-gray-600 group-hover:bg-gray-200 group-hover:text-black transition-colors">
+                            <UploadIcon className="size-4" />
+                          </div>
+                          <div className="flex items-center justify-center transition hover:text-black">
+                            {screenshotUrl ? "Change Screenshot" : "Scan UI"}
+                          </div>
+                        </label>
+                        <input
+                          // name="screenshot"
+                          id="screenshot"
+                          type="file"
+                          accept="image/png, image/jpeg, image/webp"
+                          onChange={handleScreenshotUpload}
+                          className="hidden"
+                          ref={fileInputRef}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="relative flex shrink-0 has-[:disabled]:opacity-50">
+                      <div className="pointer-events-none absolute inset-0 -bottom-[1px] rounded bg-black" />
+
+                      <LoadingButton
+                        className="relative inline-flex size-6 items-center justify-center rounded bg-black font-medium text-white shadow-lg outline-black hover:bg-black/75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-90"
+                        type="submit"
+                        disabled={screenshotLoading || prompt.length === 0}
+                      >
+                        <ArrowRightIcon />
+                      </LoadingButton>
+                    </div>
                   </div>
-                </div>
 
-                {isPending && (
-                  <LoadingMessage
-                    isHighQuality={quality === "high"}
-                    screenshotUrl={screenshotUrl}
-                  />
-                )}
-              </div>
-              <div className="mt-4 flex w-full flex-wrap justify-between gap-2.5">
-                {SUGGESTED_PROMPTS.map((v) => (
-                  <button
-                    key={v.title}
-                    type="button"
-                    onClick={() => {
-                      setPrompt(v.description);
-                      // Refocus the textarea after setting the prompt
-                      setTimeout(() => {
-                        textareaRef.current?.focus();
-                        // Position cursor at the end
-                        if (textareaRef.current) {
-                          textareaRef.current.selectionStart =
-                            textareaRef.current.value.length;
-                          textareaRef.current.selectionEnd =
-                            textareaRef.current.value.length;
-                        }
-                      }, 0);
-                    }}
-                    className="rounded bg-gray-100 px-2.5 py-1.5 text-xs text-gray-600 font-medium tracking-[0%] transition-colors hover:bg-gray-200 hover:text-gray-900 border border-gray-200/50"
-                  >
-                    {v.title}
-                  </button>
-                ))}
-              </div>
-            </Fieldset>
-          </form>
+                  {isPending && (
+                    <LoadingMessage
+                      isHighQuality={quality === "high"}
+                      screenshotUrl={screenshotUrl}
+                    />
+                  )}
+                </div>
+                <div className="mt-4 flex w-full flex-wrap justify-between gap-2.5">
+                  {SUGGESTED_PROMPTS.map((v) => (
+                    <button
+                      key={v.title}
+                      type="button"
+                      onClick={() => {
+                        setPrompt(v.description);
+                        // Refocus the textarea after setting the prompt
+                        setTimeout(() => {
+                          textareaRef.current?.focus();
+                          // Position cursor at the end
+                          if (textareaRef.current) {
+                            textareaRef.current.selectionStart =
+                              textareaRef.current.value.length;
+                            textareaRef.current.selectionEnd =
+                              textareaRef.current.value.length;
+                          }
+                        }, 0);
+                      }}
+                      className="rounded bg-white px-2.5 py-1.5 text-xs text-gray-600 font-medium tracking-[0%] transition-colors hover:bg-gray-100 hover:text-black border border-gray-200"
+                    >
+                      {v.title}
+                    </button>
+                  ))}
+                </div>
+              </Fieldset>
+            </form>
+          </div>
         </div>
 
-        <Footer />
+        <div className="relative z-10 bg-neutral-950">
+          <Features />
+          <HowItWorks />
+          <Footer />
+        </div>
       </div>
     </div>
   );
@@ -397,8 +408,8 @@ const Footer = memo(() => {
   return (
     <footer className="flex w-full flex-col items-center justify-between space-y-3 px-5 pb-3 pt-5 text-center sm:flex-row sm:pt-2">
       <div>
-        <div className="font-medium text-gray-500 text-sm">
-          Built with <span className="text-blue-600 font-semibold">Pixly</span> · Powered by AI
+        <div className="font-medium text-white/70 text-sm drop-shadow">
+          Built with <span className="text-white font-semibold">Pixon</span> · Powered by AI
         </div>
       </div>
       <div className="flex items-center gap-4 pb-4 sm:pb-0">
@@ -407,7 +418,7 @@ const Footer = memo(() => {
           className="group"
           aria-label="View on GitHub"
         >
-          <GithubIcon className="h-5 w-5 fill-gray-500 transition group-hover:fill-white" />
+          <GithubIcon className="h-5 w-5 fill-white/70 transition group-hover:fill-white" />
         </Link>
       </div>
     </footer>

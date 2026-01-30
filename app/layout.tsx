@@ -2,19 +2,17 @@ import type { Metadata } from "next";
 import PlausibleProvider from "next-plausible";
 import "./globals.css";
 
-let title = "Pixly - Turn Ideas into Apps";
+let title = "Pixon - Turn Ideas into Apps";
 let description = "Generate your next app with AI instantly.";
-let url = "https://pixly.app/";
-let ogimage = "https://pixly.app/og-image.png";
-let sitename = "pixly.app";
+let url = "https://pixon.app/";
+let ogimage = "https://pixon.app/og-image.png";
+let sitename = "pixon.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(url),
   title,
   description,
-  icons: {
-    icon: "/favicon.ico",
-  },
+
   openGraph: {
     images: [ogimage],
     title,
@@ -40,6 +38,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full">
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
         <PlausibleProvider domain="llamacoder.io" />
       </head>
 

@@ -1,10 +1,10 @@
 
 <div align="center">
   <a href="https://github.com/jayeshsingh-11/Pixly">
-    <img src="./app/icon.svg" alt="Pixly Logo" width="80" height="80">
+    <img src="./app/icon.svg" alt="Pixon Logo" width="80" height="80">
   </a>
   
-  <h1 align="center">Pixly</h1>
+  <h1 align="center">Pixon</h1>
 </div>
 
 <p align="center">
@@ -34,7 +34,7 @@
 1. **Clone the repo**
    ```bash
    git clone https://github.com/jayeshsingh-11/Pixly.git
-   cd Pixly
+   cd Pixon
    ```
 
 2. **Install dependencies**
