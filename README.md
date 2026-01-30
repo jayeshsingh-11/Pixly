@@ -1,30 +1,78 @@
-<a href="https://www.llamacoder.io">
-  <img alt="Llama Coder" src="./public/og-image.png">
-  <h1 align="center">Llama Coder</h1>
-</a>
+
+<div align="center">
+  <a href="https://github.com/jayeshsingh-11/Pixly">
+    <img src="./app/icon.svg" alt="Pixly Logo" width="80" height="80">
+  </a>
+  
+  <h1 align="center">Pixly</h1>
+</div>
 
 <p align="center">
-  An open source Claude Artifacts – generate small apps with one prompt. Powered by Llama 3 on Together.ai.
+  An open source AI app generator. Turn your idea into an app in seconds.<br>
+  Powered by Llama 3 on Groq & Google Gemini.
 </p>
 
-## Tech stack
+## ✨ Features
 
-- [Llama 3.1 405B](https://ai.meta.com/blog/meta-llama-3-1/) from Meta for the LLM
-- [Together AI](https://togetherai.link/?utm_source=llamacoder&utm_medium=referral&utm_campaign=example-app) for LLM inference
-- [Sandpack](https://sandpack.codesandbox.io/) for the code sandbox
-- Next.js app router with Tailwind
-- Helicone for observability
-- Plausible for website analytics
+- **Fast & Smart**: Powered by **Llama 3.1** & **Google Gemini** for instant code generation.
+- **Premium UI**: Clean, modern interface with a "Lovable" aesthetic (Light Mode + shadcn/ui).
+- **Interactive Sandbox**: Edit and preview your generated apps in real-time with Sandpack.
+- **Image Scanning**: Upload screenshots to clone or iterate on existing designs.
+- **Multi-Model Support**: Switch between Llama 3, Gemini Flash/Pro, and more.
 
-## Cloning & running
+## 🛠️ Tech Stack
 
-1. Clone the repo: `git clone https://github.com/Nutlope/llamacoder`
-2. Create a `.env` file and add your API keys:
-   - **[Together AI API key](https://dub.sh/together-ai/?utm_source=example-app\&utm_medium=llamacoder\&utm_campaign=llamacoder-app-signup)**: `TOGETHER_API_KEY=<your_together_ai_api_key>`
-   - **[CSB API key](https://codesandbox.io/signin)**: `CSB_API_KEY=<your_csb_api_key>`
-   - **Database URL**: Use [Neon](https://neon.tech) to set up your PostgreSQL database and add the Prisma connection string: `DATABASE_URL=<your_database_url>`
-3. Run `npm install` and `npm run dev` to install dependencies and run locally
+- **Framework**: [Next.js](https://nextjs.org/) (App Router)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) + [shadcn/ui](https://ui.shadcn.com/)
+- **LLM Inference**: [Groq](https://groq.com/) & [Google AI](https://ai.google.dev/)
+- **Sandbox**: [Sandpack](https://sandpack.codesandbox.io/)
+- **Database**: [PostgreSQL](https://www.postgresql.org/) (via Neon)
+- **Deploy**: Vercel
 
-## Contributing
+## 🚀 Getting Started
 
-For contributing to the repo, please see the [contributing guide](./CONTRIBUTING.md)
+1. **Clone the repo**
+   ```bash
+   git clone https://github.com/jayeshsingh-11/Pixly.git
+   cd Pixly
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   # or
+   pnpm install
+   ```
+
+3. **Set up environment variables**
+   Create a `.env` file in the root directory and add your API keys:
+
+   ```env
+   # Database (Neon)
+   DATABASE_URL="postgresql://..."
+
+   # AI Providers
+   GROQ_API_KEY="gsk_..."
+   GOOGLE_API_KEY="AIza..."
+   OPENROUTER_API_KEY="sk-or-..."
+
+   # Optional
+   HELICONE_API_KEY="" # For observability
+   ```
+
+4. **Run the development server**
+   ```bash
+   npm run dev
+   # or
+   pnpm dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000) to see the app!
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+This project is licensed under the [MIT License](./LICENSE).
