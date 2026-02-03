@@ -14,14 +14,12 @@ import GithubIcon from "@/components/icons/github-icon";
 import LightningBoltIcon from "@/components/icons/lightning-bolt";
 import LoadingButton from "@/components/loading-button";
 import Spinner from "@/components/spinner";
-import bgImg from "@/public/pixon-bg-final.png";
+import { CodexBackground } from "@/components/codex-background";
 import assert from "assert";
 import { CheckIcon, ChevronDownIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Features } from "@/components/features";
-import { HowItWorks } from "@/components/how-it-works";
 import {
   use,
   useState,
@@ -99,15 +97,7 @@ export default function Home() {
     <div className="flex flex-col h-screen overflow-y-auto overflow-x-hidden">
       <div className="relative flex flex-col h-[100dvh] w-full shrink-0">
         <div className="absolute inset-0 flex justify-center overflow-hidden">
-          <Image
-            src={bgImg}
-            alt=""
-            className="w-full h-full object-cover object-top"
-            priority
-            quality={100}
-            sizes="100vw"
-            unoptimized
-          />
+          <CodexBackground />
         </div>
 
         <div className="isolate flex flex-col h-full">
@@ -115,9 +105,9 @@ export default function Home() {
 
           <div className="mt-10 flex grow flex-col items-center px-4 lg:mt-16">
             <h1 className="mt-4 text-balance text-center text-4xl leading-none font-bold text-white md:text-[64px] lg:mt-8 tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]">
-              Turn your <span className="bg-gradient-to-r from-pink-300 to-rose-400 bg-clip-text text-transparent font-black drop-shadow-none">idea</span>
+              Turn your <span className="bg-gradient-to-r from-pink-300 to-purple-400 bg-clip-text text-transparent font-black drop-shadow-none">idea</span>
               <br className="hidden md:block" /> into an{" "}
-              <span className="bg-gradient-to-r from-amber-200 to-yellow-400 bg-clip-text text-transparent font-black drop-shadow-none">app</span>
+              <span className="bg-gradient-to-r from-cyan-300 to-emerald-400 bg-clip-text text-transparent font-black drop-shadow-none">app</span>
             </h1>
 
             <p className="mt-4 text-balance text-center text-lg text-white/90 max-w-lg drop-shadow-md">
@@ -174,7 +164,7 @@ export default function Home() {
               }}
             >
               <Fieldset>
-                <div className="relative flex w-full max-w-2xl rounded-xl border border-gray-200 bg-white pb-10 shadow-xl shadow-black/5 ring-1 ring-gray-200">
+                <div className="relative flex w-full max-w-2xl rounded-xl border border-white/10 bg-white/5 backdrop-blur-md pb-10 shadow-2xl ring-1 ring-white/10 transition-all hover:bg-white/10">
                   <div className="w-full">
                     {screenshotLoading && (
                       <div className="relative mx-3 mt-3">
@@ -236,7 +226,7 @@ export default function Home() {
                         required
                         name="prompt"
                         rows={2}
-                        className="peer absolute inset-0 w-full resize-none bg-transparent px-4 py-3 text-gray-900 placeholder-gray-500 focus-visible:outline-none disabled:opacity-50"
+                        className="peer absolute inset-0 w-full resize-none bg-transparent px-4 py-3 text-white placeholder-gray-400 focus-visible:outline-none disabled:opacity-50"
                         value={prompt}
                         onChange={(e) => setPrompt(e.target.value)}
                         onPaste={(e) => {
@@ -286,7 +276,7 @@ export default function Home() {
                   <div className="absolute bottom-2 left-3 right-2.5 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <Select value={model} onValueChange={setModel}>
-                        <SelectTrigger className="w-[180px] border-none bg-transparent px-2 text-gray-500 hover:bg-gray-50 hover:text-gray-900 shadow-none focus:ring-0">
+                        <SelectTrigger className="w-[180px] border-none bg-transparent px-2 text-gray-300 hover:bg-white/5 hover:text-white shadow-none focus:ring-0 transition-colors">
                           <SelectValue placeholder="Select model" />
                         </SelectTrigger>
                         <SelectContent>
@@ -303,7 +293,7 @@ export default function Home() {
                       <div className="h-4 w-px bg-gray-200 max-sm:hidden" />
 
                       <Select value={quality} onValueChange={setQuality}>
-                        <SelectTrigger className="w-[160px] border-none bg-transparent px-2 text-gray-500 hover:bg-gray-50 hover:text-gray-900 shadow-none focus:ring-0">
+                        <SelectTrigger className="w-[160px] border-none bg-transparent px-2 text-gray-300 hover:bg-white/5 hover:text-white shadow-none focus:ring-0 transition-colors">
                           <SelectValue placeholder="Select quality" />
                         </SelectTrigger>
                         <SelectContent>
@@ -323,9 +313,9 @@ export default function Home() {
                       <div>
                         <label
                           htmlFor="screenshot"
-                          className="flex cursor-pointer gap-2 text-sm text-gray-500 hover:text-black font-medium transition-colors items-center"
+                          className="flex cursor-pointer gap-2 text-sm text-gray-400 hover:text-white font-medium transition-colors items-center"
                         >
-                          <div className="flex size-7 items-center justify-center rounded-lg bg-gray-100 text-gray-600 group-hover:bg-gray-200 group-hover:text-black transition-colors">
+                          <div className="flex size-7 items-center justify-center rounded-lg bg-white/10 text-gray-300 group-hover:bg-white/20 group-hover:text-white transition-colors">
                             <UploadIcon className="size-4" />
                           </div>
                           <div className="flex items-center justify-center transition hover:text-black">
@@ -348,7 +338,7 @@ export default function Home() {
                       <div className="pointer-events-none absolute inset-0 -bottom-[1px] rounded bg-black" />
 
                       <LoadingButton
-                        className="relative inline-flex size-6 items-center justify-center rounded bg-black font-medium text-white shadow-lg outline-black hover:bg-black/75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-90"
+                        className="relative inline-flex size-6 items-center justify-center rounded bg-white font-medium text-black shadow-lg hover:bg-gray-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-90 transition-colors"
                         type="submit"
                         disabled={screenshotLoading || prompt.length === 0}
                       >
@@ -383,7 +373,7 @@ export default function Home() {
                           }
                         }, 0);
                       }}
-                      className="rounded bg-white px-2.5 py-1.5 text-xs text-gray-600 font-medium tracking-[0%] transition-colors hover:bg-gray-100 hover:text-black border border-gray-200"
+                      className="rounded bg-white/5 px-2.5 py-1.5 text-xs text-gray-300 font-medium tracking-[0%] transition-colors hover:bg-white/10 hover:text-white border border-white/10 backdrop-blur-sm"
                     >
                       {v.title}
                     </button>
@@ -394,9 +384,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="relative z-10 bg-neutral-950">
-          <Features />
-          <HowItWorks />
+        <div className="relative z-10">
           <Footer />
         </div>
       </div>
@@ -433,17 +421,36 @@ function LoadingMessage({
   screenshotUrl: string | undefined;
 }) {
   return (
-    <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-white px-1 py-3 md:px-3">
-      <div className="flex flex-col items-center justify-center gap-2 text-gray-500">
-        <span className="animate-pulse text-balance text-center text-sm md:text-base">
+    <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-black/60 backdrop-blur-md px-4 py-8 border border-white/10 overflow-hidden">
+      {/* App Skeleton Structure */}
+      <div className="absolute inset-0 p-4 flex gap-4 opacity-30">
+        {/* Sidebar Skeleton */}
+        <div className="w-16 h-full rounded-lg bg-white/10 animate-pulse hidden sm:block" />
+
+        {/* Main Content Skeleton */}
+        <div className="flex-1 flex flex-col gap-4">
+          {/* Header Skeleton */}
+          <div className="h-8 w-full rounded-lg bg-white/10 animate-pulse" />
+
+          {/* Body Skeletons */}
+          <div className="flex-1 rounded-lg bg-white/5 animate-pulse flex flex-col gap-3 p-3">
+            <div className="h-20 w-full rounded bg-white/10" />
+            <div className="h-20 w-full rounded bg-white/10" />
+            <div className="flex-1 w-full rounded bg-white/10" />
+          </div>
+        </div>
+      </div>
+
+      {/* Loading Text Overlay */}
+      <div className="relative z-10 flex flex-col items-center justify-center gap-3 text-white">
+        <Spinner className="size-6 text-cyan-400" />
+        <span className="animate-pulse text-balance text-center text-sm md:text-base font-medium drop-shadow-md">
           {isHighQuality
             ? `Coming up with project plan, may take 15 seconds...`
             : screenshotUrl
               ? "Analyzing your screenshot..."
-              : `Creating your app...`}
+              : `Building your app...`}
         </span>
-
-        <Spinner />
       </div>
     </div>
   );
